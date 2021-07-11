@@ -133,6 +133,7 @@
       fetch("https://api.github.com/users/prad4787/repos?per_page=10")
         .then((res) => res.json())
         .then((res) => {
+          console.log(res)
           let htm = ``;
           res.forEach((doc) => {
             htm += `<div class="project_cards_area flex">
@@ -159,7 +160,7 @@
                   doc.html_url
                 }" target="_blank" class="project_card_data"> Visit Repo </a>`;
             if (doc.homepage)
-              htm += ` <a href="#" class="project_card_data"> Visit Website </a>`;
+              htm += ` <a href="${doc.homepage}" class="project_card_data"> Visit Website </a>`;
             htm += `</div>
             </div>
           </div>

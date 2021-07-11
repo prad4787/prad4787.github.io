@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pradip Parajuli - Portfolio</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+      integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="loading" class="loading">
+      <img src="loading.gif" alt="Loading..." class="loading" />
+    </div>
+    <main id="main_holder" hidden>
+      <section class="user container flex">
+        <div class="user_image" id="user_image"></div>
+
+        <div class="user_text">
+          <h1 class="user_title">
+            Hi, I am
+            <br />
+            <span id="full_name"></span>
+          </h1>
+          <h3 class="user_description" id="user_description"></h3>
+          <p class="user_description">I have <b id="count"></b> followers</p>
+          <p class="user_description">
+            I am using github since <b id="year"></b> A.D
+          </p>
+        </div>
+      </section>
+
+      <section class="project">
+        <div class="container">
+          <header class="project_header flex">
+            <h2 class="title">Projects</h2>
+          </header>
+          <hr />
+          <div class="float_right">
+            <span>Total Project: <b id="project_count"> 2 </b> </span>
+          </div>
+          <div id="project_holder"></div>
+        </div>
+      </section>
+
+      <section class="twitter_card">
+        <div class="container">
+          <a
+            class="twitter-timeline"
+            href="https://twitter.com/prad4787?ref_src=twsrc%5Etfw"
+            >Tweets by prad4787</a
+          >
+          <script
+            async
+            src="https://platform.twitter.com/widgets.js"
+            charset="utf-8"
+          ></script>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <div class="footer_links flex">
+          <a
+            href="https://www.facebook.com/profile.php?id=100006892844788"
+            target="_blank"
+            class="footer_link flex"
+            ><i class="fab fa-facebook-f"></i
+          ></a>
+          <a
+            href="https://www.instagram.com/pradipparajuli09/"
+            target="_blank"
+            class="footer_link flex"
+            ><i class="fab fa-instagram"></i
+          ></a>
+          <a
+            href="https://www.linkedin.com/in/pradip-parajuli-09/"
+            target="_blank"
+            class="footer_link flex"
+            ><i class="fab fa-linkedin-in"></i
+          ></a>
+        </div>
+        <div class="footer_text">
+          <p class="footer_paragraph">
+            Copyright &copy;
+            <script>
+              document.write(new Date().getFullYear());
+            </script>
+            All rights reserved
+          </p>
+        </div>
+      </footer>
+      <a class="floating_btn" id="github" target="_blank">
+        <i class="fab fa-github"></i> Github</a
+      >
+    </main>
+
+    <script>
+      fetch("https://api.github.com/users/prad4787")
+        .then((res) => res.json())
+        .then((res) => {
+          console.log(res);
+          // avatar
+          document.getElementById(
+            "user_image"
+          ).style.backgroundImage = `url('${res.avatar_url}')`;
+
+          // full name
+          document.getElementById("full_name").innerText = res.name;
+
+          // bio or description
+          document.getElementById("user_description").innerText = res.bio;
+
+          // github link
+          document.getElementById("github").href = res.html_url;
+
+          // join date
+          document.getElementById("year").innerText = new Date(
+            res.created_at
+          ).getFullYear();
+
+          // follower count
+          document.getElementById("count").innerText = res.followers;
+        });
+    </script>
+
+    <script>
+      fetch("https://api.github.com/users/prad4787/repos?per_page=10")
+        .then((res) => res.json())
+        .then((res) => {
+          let htm = ``;
+          res.forEach((doc) => {
+            htm += `<div class="project_cards_area flex">
+          <div class="project_card flex">
+            <div class="project_card_image"  style="background-image:url('${
+              doc.owner.avatar_url
+            }') !important"></div>
+
+            <div class="project_card_text">
+              <h3 class="project_card_title" >${doc.name
+                .replace(/-/g, " ")
+                .toLocaleUpperCase()}</h3>
+              <div class="project_card_info">
+                <span class="project_card_data">${new Date(
+                  doc.created_at
+                ).getFullYear()}</span>
+              </div>
+              <p class="project_card_description">
+                ${doc.description}
+              </p>
+
+              <div class="project_card_info">
+                <a href="${
+                  doc.html_url
+                }" target="_blank" class="project_card_data"> Visit Repo </a>`;
+            if (doc.homepage)
+              htm += ` <a href="#" class="project_card_data"> Visit Website </a>`;
+            htm += `</div>
+            </div>
+          </div>
+        </div>`;
+          });
+
+          document.getElementById("project_holder").innerHTML = htm;
+          // 
+          document.getElementById("loading").style.display = "none";
+          document.getElementById("main_holder").hidden = false;
+        });
+    </script>
+  </body>
+</html>

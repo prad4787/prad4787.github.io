@@ -43,7 +43,7 @@
           </header>
           <hr />
           <div class="float_right">
-            <span>Total Project: <b id="project_count"> 2 </b> </span>
+            <span>Total Project: <b id="project_count"> </b> </span>
           </div>
           <div id="project_holder"></div>
         </div>
@@ -126,6 +126,9 @@
 
           // follower count
           document.getElementById("count").innerText = res.followers;
+
+          // project Count
+          document.getElementById("project_count").innerText = res.public_repos;
         });
     </script>
 
@@ -133,7 +136,7 @@
       fetch("https://api.github.com/users/prad4787/repos?per_page=10")
         .then((res) => res.json())
         .then((res) => {
-          console.log(res)
+          console.log(res);
           let htm = ``;
           res.forEach((doc) => {
             htm += `<div class="project_cards_area flex">
@@ -145,14 +148,15 @@
             <div class="project_card_text">
               <h3 class="project_card_title" >${doc.name
                 .replace(/-/g, " ")
-                .toLocaleUpperCase()}</h3>
+                .toLocaleUpperCase()}
+                </h3>
               <div class="project_card_info">
                 <span class="project_card_data">${new Date(
                   doc.created_at
                 ).getFullYear()}</span>
               </div>
               <p class="project_card_description">
-                ${doc.description}
+                ${doc.description && doc.description}
               </p>
 
               <div class="project_card_info">
@@ -160,7 +164,7 @@
                   doc.html_url
                 }" target="_blank" class="project_card_data"> Visit Repo </a>`;
             if (doc.homepage)
-              htm += ` <a href="${doc.homepage}" class="project_card_data"> Visit Website </a>`;
+              htm += ` <a href="${doc.homepage}" target="_blank" class="project_card_data"> Visit Website </a>`;
             htm += `</div>
             </div>
           </div>
@@ -168,7 +172,7 @@
           });
 
           document.getElementById("project_holder").innerHTML = htm;
-          // 
+          //
           document.getElementById("loading").style.display = "none";
           document.getElementById("main_holder").hidden = false;
         });

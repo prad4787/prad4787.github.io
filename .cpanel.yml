@@ -1,0 +1,5 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/kritikar/parajuli.me/
+    - /bin/cp -R * $DEPLOYPATH
